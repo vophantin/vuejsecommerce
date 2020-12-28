@@ -1,11 +1,12 @@
 <template>
   <div class="parent">
-      <div class="first">
+      <div class="first"> 
         <div class="fleft">
-          left
+          <img src="https://image.ibb.co/e0RLzK/entrepreneur_1340649_340.jpg" style="width:30%px; height:100%;"/>
         </div>
         <div class="fright">
-          right
+           <button style="margin-left: 90%;">Nhập</button> 
+           <button style="margin-left: 90%;">Xuất</button>
         </div>
         
       </div>
@@ -16,6 +17,11 @@
         </div>
         <div class="scenter">
           <button v-on:click="greet()">click here</button>
+          <div>
+              <span v-for="text in textarr" v-bind:key="text"> 
+              {{ text.textarr }} 
+              </span>
+          </div>            
         </div>
         <div class="sright">
           right
@@ -27,19 +33,20 @@
         </div>
     </div>
     <div class="third">
-      sfsdf
+      <img src="https://image.ibb.co/e0RLzK/entrepreneur_1340649_340.jpg" style="width:20%; height:100%;"/>
     </div>
   </div>
 </template>
 
 <script>
-
-
+import axios from 'axios';
 export default {
   name: 'HelloWorld', 
   data: function () {
     return {
-      count: 0
+      textarr:[
+          
+      ]
     }
   }, 
   props: {
@@ -55,21 +62,26 @@ export default {
       return num;
     },
     abc: function() {
-      
-         for(let i=0;i<=11;i++)
-         {
-           if(i%i==0)
-           {
-             console.log(i)
-           }
-         }
-        
-         
-      
+      axios.get('https://cat-fact.herokuapp.com/facts')
+        .then(function (response) {
+          // handle success
+            let data1=response.data;
+            
+            for(let i=0;i<data1.length;i++)
+            {           
+              console.log(data1[i].text);
+              this.textarr[i]=data1[i].text;             
+            }           
+        })
+        .catch(function (error) {
+          // handle error
+          console.log(error);
+        })
+        .then(function () {
+          // always executed
+        });
     }
   }
-
- 
 }
 </script>
 
@@ -94,7 +106,7 @@ a {
   height:100%;
 }
 .first {
- height: 20% ;
+ height: 22% ;
  background-color: red;
  display: inline-flex;
  width: 100%;
@@ -107,7 +119,7 @@ a {
  width: 100%;
 }
 .third {
-  text-align: right;
+  text-align: center;
  height: 20% ;
  background-color:green
 }
@@ -117,10 +129,11 @@ a {
   
 }
 .fright {
-  text-align: right;
   width: 50%;
-  
+  display: grid ;
 }
+
+
 .sleft {
   text-align: left;
   width: 100%;
@@ -145,4 +158,5 @@ a {
   height: 50%;
   border: 2px solid black;
 }
+
 </style>
