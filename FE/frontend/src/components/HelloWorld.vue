@@ -17,10 +17,12 @@
         </div>
         <div class="scenter">
           <button v-on:click="greet()">click here</button>
-          <div>
-              <span v-for="text in textarr" v-bind:key="text"> 
-              {{ text.textarr }} 
-              </span>
+          <div v-if="textarr.length > 0">
+              <ul>
+                <li v-for="input in textarr" :key="input">
+                  {{ input }}
+                </li>
+              </ul>
           </div>            
         </div>
         <div class="sright">
@@ -52,6 +54,11 @@ export default {
   props: {
     msg: String,
   },
+  computed: {
+    textArray () {
+        return this.entries.filter(entry => entry.type === this.entryType)
+    }
+  },
   methods: {
     greet: function () {
       
@@ -62,6 +69,7 @@ export default {
       return num;
     },
     abc: function() {
+    let vm = this;
       axios.get('https://cat-fact.herokuapp.com/facts')
         .then(function (response) {
           // handle success
@@ -70,7 +78,7 @@ export default {
             for(let i=0;i<data1.length;i++)
             {           
               console.log(data1[i].text);
-              this.textarr[i]=data1[i].text;             
+              vm.textarr.push(data1[i].text);             
             }           
         })
         .catch(function (error) {
